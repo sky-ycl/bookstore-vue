@@ -72,7 +72,7 @@ export const constantRoutes = [
         path: 'manage',
         name: 'manage',
         component: () => import('@/views/books/manage.vue'),
-        meta: { title: '书籍管理', icon: 'tree' }
+        meta: { title: '我的书籍', icon: 'tree' }
       }
     ]
   },
@@ -85,7 +85,32 @@ export const constantRoutes = [
         path: 'index',
         name: 'index',
         component: () => import('@/views/user/index'),
-        meta: { title: '用户管理', icon: 'form' }
+        meta: { title: '购物车', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/coupon',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'index',
+        component: () => import('@/views/user/index'),
+        meta: { title: '优惠卷', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/order',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'index',
+        component: () => import('@/views/user/index'),
+        meta: { title: '订单', icon: 'form' }
       }
     ]
   },
@@ -110,7 +135,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'index',
         component: () => import('@/views/permission/index.vue'),
-        meta: { title: '权限管理', icon: 'link' }
+        meta: { title: '支付记录', icon: 'link' }
       }
     ]
   },

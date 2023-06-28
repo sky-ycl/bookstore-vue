@@ -13,7 +13,7 @@
         <el-input
           ref="username"
           v-model="loginForm.username"
-          placeholder="用户名"
+          placeholder="手机号/用户名"
           name="username"
           type="text"
           tabindex="1"
@@ -44,8 +44,7 @@
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登入</el-button>
 
       <div class="tips">
-        <span style="margin-right:20px;">username: admin</span>
-        <span> password: any</span>
+        <span><a href="http://www.baidu.com">短信登录</a></span>
       </div>
 
     </el-form>
@@ -139,6 +138,7 @@ $cursor: #fff;
   }
 }
 
+
 /* reset element-ui css */
 .login-container {
   .el-input {
@@ -179,28 +179,33 @@ $light_gray:#eee;
 
 .login-container {
   min-height: 100%;
+  display: flex;
   width: 100%;
   background-color: $bg;
   overflow: hidden;
-  background-image: url("../../assets/bg.jpg");
+  background-image: url("../../assets/image/bg1.jpg");
   background-size: 100%;
+  align-items: center;
   .login-form {
     position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 30px 50px 10px;
     margin: 0 auto;
     overflow: hidden;
+    background-color: #eeeeee;
+    border-radius: 10px;
+    opacity: 0.9;
   }
 
   .tips {
-    font-size: 14px;
-    color: #fff;
+    font-size: 16px;
+    color:black;
     margin-bottom: 10px;
 
     span {
       &:first-of-type {
-        margin-right: 16px;
+        margin-left: 350px;
       }
     }
   }
@@ -218,7 +223,7 @@ $light_gray:#eee;
 
     .title {
       font-size: 26px;
-      color: $light_gray;
+      color: black;
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;

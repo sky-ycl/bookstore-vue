@@ -6,15 +6,15 @@
         <h3 class="title">欢迎登入朵云书店</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="phone">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
-          v-model="loginForm.username"
+          ref="phone"
+          v-model="loginForm.phone"
           placeholder="手机号/用户名"
-          name="username"
+          name="phone"
           type="text"
           tabindex="1"
           auto-complete="on"
@@ -52,14 +52,14 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+import { validPhone } from '@/utils/validate'
 
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('请输入你的用户名'))
+    const validatePhone = (rule, value, callback) => {
+      if (!validPhone(value)) {
+        callback(new Error('请输入你手机号'))
       } else {
         callback()
       }
@@ -73,11 +73,11 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
+        phone: 'admin',
         password: '111111'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       loading: false,
@@ -195,7 +195,7 @@ $light_gray:#eee;
     overflow: hidden;
     background-color: #eeeeee;
     border-radius: 10px;
-    opacity: 0.9;
+    opacity: 0.95;
   }
 
   .tips {

@@ -29,8 +29,8 @@ module.exports = [
     url: '/user/login',
     type: 'post',
     response: config => {
-      const { username } = config.body
-      const token = tokens[username]
+      const { phone } = config.body
+      const token = tokens[phone]
 
       // mock error
       // 登录失败

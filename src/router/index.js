@@ -64,13 +64,13 @@ export const constantRoutes = [
     children: [
       {
         path: 'list',
-        name: 'list',
+        name: 'bookList',
         component: () => import('@/views/books/list.vue'),
         meta: { title: '书籍列表', icon: 'table' }
       },
       {
         path: 'manage',
-        name: 'manage',
+        name: 'bookManage',
         component: () => import('@/views/books/manage.vue'),
         meta: { title: '我的书籍', icon: 'tree' }
       }
@@ -78,12 +78,12 @@ export const constantRoutes = [
   },
 
   {
-    path: '/user',
+    path: '/shop',
     component: Layout,
     children: [
       {
         path: 'index',
-        name: 'index',
+        name: 'Shop',
         component: () => import('@/views/user/index'),
         meta: { title: '购物车', icon: 'form' }
       }
@@ -96,7 +96,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        name: 'index',
+        name: 'Coupon',
         component: () => import('@/views/user/index'),
         meta: { title: '优惠卷', icon: 'form' }
       }
@@ -108,7 +108,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        name: 'index',
+        name: 'Order',
         component: () => import('@/views/user/index'),
         meta: { title: '订单', icon: 'form' }
       }
@@ -120,7 +120,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        name: 'index',
+        name: 'Friends',
         component: () => import('@/views/friends/index.vue'),
         meta: { title: '朵云圈', icon: 'el-icon-s-help' }
       }
@@ -133,7 +133,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        name: 'index',
+        name: 'Permission',
         component: () => import('@/views/permission/index.vue'),
         meta: { title: '支付记录', icon: 'link' }
       }

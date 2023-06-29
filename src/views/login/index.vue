@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">欢迎登入朵云书店</h3>
+        <h3 class="title">欢迎登录朵云书店</h3>
       </div>
 
       <el-form-item prop="phone">
@@ -41,7 +41,7 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登入</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
       <div class="tips">
         <span><a href="http://www.baidu.com">短信登录</a></span>
@@ -73,8 +73,8 @@ export default {
     }
     return {
       loginForm: {
-        phone: 'admin',
-        password: '111111'
+        phone: '13686869696',
+        password: '123456'
       },
       loginRules: {
         phone: [{ required: true, trigger: 'blur', validator: validatePhone }],

@@ -4,9 +4,9 @@
     <el-card id="search">
       <el-row>
         <el-col :span="20">
-          <el-input v-model="searchModel.title" placeholder="书籍名称"></el-input>
-          <el-input v-model="searchModel.author" placeholder="作者"></el-input>
-          <el-button type="primary" round>查询</el-button>
+          <el-input v-model="searchModel.title" placeholder="书籍名称" clearable></el-input>
+          <el-input v-model="searchModel.author"   placeholder="作者" clearable></el-input>
+          <el-button  @click="getBookList" type="primary" round icon="el-icon-search">查询</el-button>
         </el-col>
         <el-col :span="4" align="right">
           <el-button type="primary" icon="el-icon-plus" circle></el-button>
@@ -16,15 +16,34 @@
     <!--结果列表-->
     <el-card>
       <el-table :data="bookList" stripe style="width: 100%">
-        <el-table-column prop="index" label="#" width="80"></el-table-column>
+        <el-table-column label="#" width="80">
+          <template v-slot="scope">
+            {{(searchModel.pageNo-1) * searchModel.pageSize + scope.$index + 1}}
+          </template>
+        </el-table-column>
         <el-table-column prop="title" label="书名" width="180"></el-table-column>
-        <el-table-column prop="author" label="作者" width="180"></el-table-column>
-        <el-table-column prop="price" label="价格"></el-table-column>
-        <el-table-column prop="publicationDate" label="出版时间"></el-table-column>
-        <el-table-column prop="quantity" label="库存"></el-table-column>
+        <el-table-column prop="author" label="作者" width="200"></el-table-column>
+        <el-table-column prop="price" label="价格" width="150"></el-table-column>
+        <el-table-column prop="quantity" label="库存" width="420"></el-table-column>
+        <el-table-column prop="id" label="操作"  header-align="center" >
+          <template v-slot:="scope">
+            <el-button type="primary" @click="getBookDetail(scope.row.id)" round>查看详情</el-button>
+            <el-button type="warning" round>加入购物车</el-button>
+            <el-button type="danger" round>立即购买</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
 
+    <!--详情列表-->
+    <el-dialog title="书籍详情" :visible.sync="dialogTableVisible">
+      <el-table :data="bookDetail">
+        <el-table-column property="title" label="书名" width="150"></el-table-column>
+        <el-table-column property="author" label="作者" width="200"></el-table-column>
+        <el-table-column property="publicationDate" label="出版时间" width="200"></el-table-column>
+        <el-table-column property="description" label="书本描述"></el-table-column>
+      </el-table>
+    </el-dialog>
     <!--分页-->
     <el-card>
       <el-pagination
@@ -47,6 +66,8 @@ import bookApi from '@/api/book'
 export default {
   data() {
     return {
+      dialogTableVisible: false,
+      bookDetail: [],
       total: 0,
       bookList: [],
       searchModel: {
@@ -56,28 +77,38 @@ export default {
     }
   },
   methods: {
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+    getBookDetail(id) {
+      bookApi.getBookById(id).then(response => {
+        this.bookDetail = [response.data.book]
+        console.log(response.data)
+      })
+      this.dialogTableVisible = true
     },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+    handleSizeChange(pageSize) {
+      this.searchModel.pageSize = pageSize
+      this.getBookList()
     },
-    // getBookList() {
-    //   bookApi.getListByPage(this.searchModel).then(response => {
-    //     console.log(response.data.total)
-    //     this.total = response.data.total
-    //     this.bookList = response.data.books
-    //   })
-    // }
+    handleCurrentChange(pageNo) {
+      this.searchModel.pageNo = pageNo
+      this.getBookList()
+    },
+    getBookList() {
+      bookApi.getListByPage(this.searchModel).then(response => {
+        this.total = response.data.total
+        this.bookList = response.data.books
+      })
+    }
   },
-  // mounted() {
-  //   this.getBookList()
-  // }
+  mounted() {
+    this.getBookList()
+  }
 }
 </script>
 
 <style>
 #search .el-input {
-  width: 200px;
+  width: 220px;
+  margin-right: 20px;
 }
+
 </style>

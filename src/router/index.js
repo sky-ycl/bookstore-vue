@@ -51,7 +51,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard', affix: true }
+      meta: { title: '首页', icon: '首页', affix: true }
     }]
   },
 
@@ -60,19 +60,19 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/books/list',
     name: 'books',
-    meta: { title: '朵云书籍', icon: 'el-icon-s-help' },
+    meta: { title: '朵云书籍', icon: '书籍' },
     children: [
       {
         path: 'list',
         name: 'bookList',
         component: () => import('@/views/books/list.vue'),
-        meta: { title: '书籍列表', icon: 'table' }
+        meta: { title: '书籍列表', icon: '书籍' }
       },
       {
         path: 'manage',
         name: 'bookManage',
         component: () => import('@/views/books/manage.vue'),
-        meta: { title: '我的书籍', icon: 'tree' }
+        meta: { title: '我的书籍', icon: '书籍' }
       }
     ]
   },
@@ -85,7 +85,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Shop',
         component: () => import('@/views/user/index'),
-        meta: { title: '购物车', icon: 'form' }
+        meta: { title: '购物车', icon: '购物车' }
       }
     ]
   },
@@ -98,7 +98,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Coupon',
         component: () => import('@/views/user/index'),
-        meta: { title: '优惠卷', icon: 'form' }
+        meta: { title: '优惠卷', icon: '优惠卷' }
       }
     ]
   },
@@ -110,7 +110,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Order',
         component: () => import('@/views/user/index'),
-        meta: { title: '订单', icon: 'form' }
+        meta: { title: '订单', icon: '订单' }
       }
     ]
   },
@@ -122,7 +122,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Friends',
         component: () => import('@/views/friends/index.vue'),
-        meta: { title: '朵云圈', icon: 'el-icon-s-help' }
+        meta: { title: '朵云圈', icon: '朋友圈' }
       }
     ]
   },
@@ -135,7 +135,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Permission',
         component: () => import('@/views/permission/index.vue'),
-        meta: { title: '支付记录', icon: 'link' }
+        meta: { title: '支付记录', icon: '支付记录' }
       }
     ]
   },
@@ -147,7 +147,7 @@ export const constantRoutes = [
     name: 'settings',
     meta: {
       title: '设置',
-      icon: 'nested'
+      icon: '设置'
     },
     children: [
       {

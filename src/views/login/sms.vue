@@ -1,13 +1,14 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+
       <div class="title-container">
         <h3 class="title">欢迎登录朵云书店</h3>
       </div>
 
       <el-form-item prop="phone">
         <span class="svg-container">
-          <svg-icon icon-class="user"/>
+          <svg-icon icon-class="user" />
         </span>
         <el-input
           ref="phone"
@@ -20,60 +21,32 @@
         />
       </el-form-item>
 
-      <el-form-item prop="password" v-if="!isSmsLogin">
+      <el-form-item prop="password">
         <span class="svg-container">
-          <svg-icon icon-class="password"/>
+          <svg-icon icon-class="password" />
         </span>
         <el-input
           :key="passwordType"
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="密码"
+          placeholder="验证码"
           name="password"
           tabindex="2"
           auto-complete="on"
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>
+          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
-      </el-form-item>
-
-      <el-form-item prop="smsCode" v-else>
-        <el-row :gutter="20">
-          <el-col :span="16">
-            <span class="svg-container">
-              <svg-icon icon-class="验证码"/>
-            </span>
-            <el-input
-              ref="smsCode"
-              v-model="loginForm.smsCode"
-              placeholder="输入验证码"
-              name="smsCode"
-              type="text"
-              tabindex="2"
-              auto-complete="on"
-            />
-          </el-col>
-          <el-col :span="8">
-            <el-button class="sms-code-btn" type="primary" :disabled="countdownTime > 0" @click="sendCode">
-              {{ countdownTime > 0 ? countdownTime + 's 后重新获取' : '获取验证码' }}
-            </el-button>
-          </el-col>
-        </el-row>
       </el-form-item>
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
-      <div class="tips-container">
-        <div class="tips tips-left">
-          <span><el-link href="#" class="register-text">立即注册</el-link></span>
-        </div>
-        <div class="tips tips-right">
-          <span><a href="javascript:void(0);" @click="toggleLoginType">{{ isSmsLogin ? '密码登录' : '短信登录' }}</a></span>
-        </div>
+      <div class="tips">
+        <span><a href="http://www.baidu.com">短信登录</a></span>
       </div>
+
     </el-form>
   </div>
 </template>
@@ -103,8 +76,6 @@ export default {
         phone: '13686869696',
         password: '123456'
       },
-      countdownTime: 0,
-      isSmsLogin: false,
       loginRules: {
         phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
@@ -123,30 +94,6 @@ export default {
     }
   },
   methods: {
-    // 获取验证码
-    sendCode() {
-      this.startCountdown()
-    },
-    startCountdown() {
-      this.countdownTime = 60 // 重置倒计时时间为 60 秒
-      const timer = setInterval(() => {
-        this.countdownTime--
-        if (this.countdownTime === 0) {
-          clearInterval(timer) // 清除定时器
-        }
-      }, 1000)
-    },
-    toggleLoginType() {
-      this.isSmsLogin = !this.isSmsLogin
-      if (this.isSmsLogin) {
-        this.loginForm.password = '' // Reset password field
-      } else {
-        this.loginForm.smsCode = '' // Reset SMS code field
-      }
-      this.$nextTick(() => {
-        this.$refs.loginForm.clearValidate() // Clear form validation
-      })
-    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -181,8 +128,8 @@ export default {
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg: #283443;
-$light_gray: #fff;
+$bg:#283443;
+$light_gray:#fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
@@ -225,9 +172,9 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg: #2d3a4b;
-$dark_gray: #889aa4;
-$light_gray: #eee;
+$bg:#2d3a4b;
+$dark_gray:#889aa4;
+$light_gray:#eee;
 
 .login-container {
   min-height: 100%;
@@ -238,7 +185,6 @@ $light_gray: #eee;
   background-image: url("../../assets/image/bg1.jpg");
   background-size: 100%;
   align-items: center;
-
   .login-form {
     position: relative;
     width: 520px;
@@ -251,25 +197,16 @@ $light_gray: #eee;
     opacity: 0.95;
   }
 
-  .tips-container {
-    display: flex;
-    justify-content: space-between;
-  }
-
   .tips {
-    margin: 10px;
-  }
+    font-size: 16px;
+    color:black;
+    margin-bottom: 10px;
 
-  .tips-left {
-    margin-right: auto;
-  }
-
-  .tips-right {
-    margin-left: auto;
-  }
-
-  .register-text {
-    color: red;
+    span {
+      &:first-of-type {
+        margin-left: 350px;
+      }
+    }
   }
 
   .svg-container {

@@ -71,7 +71,7 @@ export default {
     },
     filterAffixTags(routes, basePath = '/') {
       let tags = []
-      if(this.routes){
+      if (this.routes) {
         routes.forEach(route => {
           if (route.meta && route.meta.affix) {
             const tagPath = path.resolve(basePath, route.path)

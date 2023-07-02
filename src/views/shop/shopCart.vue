@@ -3,34 +3,30 @@
     <!--搜索栏-->
     <el-card id="search">
       <el-row>
-        <el-col :span="20">
-          <el-input v-model="searchModel.title" placeholder="书名"></el-input>
-          <el-input v-model="searchModel.author" placeholder="作者"></el-input>
-          <el-button  @click="getBookList" type="primary" round icon="el-icon-search">查询</el-button>
-        </el-col>
-        <el-col :span="4" align="right">
-          <el-button type="primary" icon="el-icon-plus" circle></el-button>
+        <el-col :span="12">
+          <el-input v-model="searchModel.title" placeholder="书名查询"></el-input>
+          <el-button @click="getShopList"  type="primary" round icon="el-icon-search">查询</el-button>
         </el-col>
       </el-row>
     </el-card>
     <!--结果列表-->
     <el-card>
-      <el-table :data="bookList" stripe style="width: 100%">
-        <el-table-column label="#" width="80">
+      <el-table :data="shopList" stripe style="width: 100%">
+        <el-table-column prop="index" label="#" width="100">
           <template v-slot="scope">
             {{(searchModel.pageNo-1) * searchModel.pageSize + scope.$index + 1}}
           </template>
         </el-table-column>
         <el-table-column prop="title" label="书名" width="180"></el-table-column>
-        <el-table-column prop="author" label="作者" width="200"></el-table-column>
-        <el-table-column prop="price" label="价格" width="150"></el-table-column>
-        <el-table-column prop="quantity" label="库存" width="420"></el-table-column>
-        <el-table-column prop="id" label="操作"  header-align="center" >
-            <template v-slot:="scope">
-              <el-button type="primary" @click="getBookDetail(scope.row.id)" round>查看详情</el-button>
-              <el-button type="warning" @click="addShopCart(scope.row.id)" round>加入购物车</el-button>
-              <el-button type="danger" round>立即购买</el-button>
-            </template>
+        <el-table-column prop="price" label="价格" width="180"></el-table-column>
+        <el-table-column prop="createdAt" label="加入购物车时间" width="250px"></el-table-column>
+        <el-table-column prop="quantity" label="数量" width="330px"></el-table-column>
+        <el-table-column prop="bookId" label="操作" header-align="center">
+          <template v-slot:="scope">
+            <el-button type="primary" @click="getBookDetail(scope.row.id)" round>查看详情</el-button>
+            <el-button type="warning" @click="cancelShop(scope.row.id)"  round >取消购物车</el-button>
+            <el-button type="danger" round>立即购买</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </el-card>
@@ -60,18 +56,16 @@
 </template>
 
 <script>
-// eslint-disable-next-line no-unused-vars
-import bookApi from '@/api/book'
 import shopApi from '@/api/shop'
-import shopUtil from '@/utils/shopUtil'
+import bookApi from '@/api/book'
+import shopUtil from '@/utils/shopUtil';
 export default {
   data() {
     return {
-      dialogTableVisible: false,
-      message: '',
-      bookDetail: [],
       total: 0,
-      bookList: [],
+      shopList: [],
+      bookDetail: [],
+      dialogTableVisible: false,
       searchModel: {
         pageNo: 1,
         pageSize: 5
@@ -79,16 +73,17 @@ export default {
     }
   },
   methods: {
-    // 加入购物车
-    addShopCart(id) {
-      shopApi.addShopCart(id).then(response => {
+    // 取消购物车
+    cancelShop(id) {
+      shopApi.cancelShopCart(id).then(response => {
         // eslint-disable-next-line no-empty
         if (response.message === 'success') {
-          shopUtil.success(this, '加入成功')
+          shopUtil.success(this, '取消成功')
           // eslint-disable-next-line no-empty
         } else {
-          shopUtil.fail(this, '加入失败')
+          shopUtil.fail(this, '取消失败')
         }
+        this.getShopList()
       })
     },
     // 得到书籍详细信息
@@ -101,22 +96,23 @@ export default {
     },
     handleSizeChange(pageSize) {
       this.searchModel.pageSize = pageSize
-      this.getBookList()
+      this.getShopList()
     },
     handleCurrentChange(pageNo) {
       this.searchModel.pageNo = pageNo
-      this.getBookList()
+      this.getShopList()
     },
     // 得到书籍列表
-    getBookList() {
-      bookApi.getListByPage(this.searchModel).then(response => {
+    getShopList() {
+      shopApi.getShopList(this.searchModel).then(response => {
         this.total = response.data.total
-        this.bookList = response.data.books
+        this.shopList = response.data.shoppingCartList
+        console.log(response.data)
       })
     }
   },
   mounted() {
-    this.getBookList()
+    this.getShopList()
   }
 }
 </script>
@@ -126,5 +122,4 @@ export default {
   width: 220px;
   margin-right: 20px;
 }
-
 </style>

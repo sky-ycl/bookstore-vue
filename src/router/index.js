@@ -82,9 +82,9 @@ export const constantRoutes = [
     component: Layout,
     children: [
       {
-        path: 'index',
-        name: 'Shop',
-        component: () => import('@/views/user/index'),
+        path: 'shopCart',
+        name: 'shopCart',
+        component: () => import('@/views/shop/shopCart.vue'),
         meta: { title: '购物车', icon: '购物车' }
       }
     ]
@@ -97,7 +97,7 @@ export const constantRoutes = [
       {
         path: 'index',
         name: 'Coupon',
-        component: () => import('@/views/user/index'),
+        component: () => import('@/views/coupon/coupon.vue'),
         meta: { title: '优惠卷', icon: '优惠卷' }
       }
     ]
@@ -109,7 +109,7 @@ export const constantRoutes = [
       {
         path: 'index',
         name: 'Order',
-        component: () => import('@/views/user/index'),
+        component: () => import('@/views/order/order.vue'),
         meta: { title: '订单', icon: '订单' }
       }
     ]
@@ -128,14 +128,26 @@ export const constantRoutes = [
   },
 
   {
-    path: '/permission',
+    path: '/payment',
     component: Layout,
     children: [
       {
-        path: 'index',
-        name: 'Permission',
-        component: () => import('@/views/permission/index.vue'),
+        path: 'record',
+        name: 'record',
+        component: () => import('@/views/payment/record.vue'),
         meta: { title: '支付记录', icon: '支付记录' }
+      }
+    ]
+  },
+  {
+    path: '/balance',
+    component: Layout,
+    children: [
+      {
+        path: 'me',
+        name: 'myBalance',
+        component: () => import('@/views/balance/balance.vue'),
+        meta: { title: '我的余额', icon: '余额' }
       }
     ]
   },

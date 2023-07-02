@@ -1,5 +1,5 @@
 <template>
-<h1>权限管理</h1>
+<h1>优惠卷</h1>
 </template>
 
 <script>

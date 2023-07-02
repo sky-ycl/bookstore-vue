@@ -8,10 +8,10 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'Dashboard',
+  nickName: 'Dashboard',
   computed: {
     ...mapGetters([
-      'name'
+      'nickName'
     ])
   }
 }

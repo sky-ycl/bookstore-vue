@@ -22,3 +22,13 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function sendCode(phone) {
+  return request({
+    url: '/user/code',
+    method: 'post',
+    params: {
+      phone
+    }
+  })
+}

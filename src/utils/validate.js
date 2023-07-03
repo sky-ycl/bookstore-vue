@@ -15,7 +15,6 @@ export function isExternal(path) {
  * @returns {Boolean}
  */
 export function validPhone(str) {
-  // const valid_map = ['admin', 'editor']
-  // return valid_map.indexOf(str.trim()) >= 0
-  return true
+  const phoneRegex = /^1[3456789]\d{9}$/
+  return phoneRegex.test(str)
 }

@@ -57,7 +57,7 @@
             />
           </el-col>
           <el-col :span="8">
-            <el-button class="sms-code-btn" type="primary" :disabled="countdownTime > 0" @click="sendCode">
+            <el-button class="sms-code-btn" type="primary" :disabled="countdownTime > 0" @click="sendSMSCode">
               {{ countdownTime > 0 ? countdownTime + 's 后重新获取' : '获取验证码' }}
             </el-button>
           </el-col>
@@ -80,13 +80,17 @@
 
 <script>
 import { validPhone } from '@/utils/validate'
-
+import { Message } from 'element-ui'
+import { sendCode } from '@/api/user'
 export default {
   name: 'Login',
   data() {
     const validatePhone = (rule, value, callback) => {
-      if (!validPhone(value)) {
-        callback(new Error('请输入你手机号'))
+      if (value === '') {
+        callback(new Error('请输入你的手机号'))
+        // eslint-disable-next-line no-empty
+      } else if (!validPhone(value)) {
+        callback(new Error('手机格式错误'))
       } else {
         callback()
       }
@@ -98,16 +102,26 @@ export default {
         callback()
       }
     }
+    const validateSms = (rule, value, callback) => {
+      if (value.length !== 6) {
+        callback(new Error('验证码是6位'))
+      } else {
+        callback()
+      }
+    }
+
     return {
       loginForm: {
         phone: '13686869696',
-        password: '123456'
+        password: '123456',
+        smsCode: ''
       },
       countdownTime: 0,
       isSmsLogin: false,
       loginRules: {
         phone: [{ required: true, trigger: 'blur', validator: validatePhone }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        smsCode: [{ required: true, trigger: 'blur', validator: validateSms }]
       },
       loading: false,
       passwordType: 'password',
@@ -124,8 +138,12 @@ export default {
   },
   methods: {
     // 获取验证码
-    sendCode() {
+    sendSMSCode() {
       this.startCountdown()
+      console.log(this.loginForm.phone)
+      sendCode(this.loginForm.phone).then(response => {
+        Message.success('注意验证码的查收')
+      })
     },
     startCountdown() {
       this.countdownTime = 60 // 重置倒计时时间为 60 秒
@@ -161,14 +179,25 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
+          if (this.isSmsLogin) {
+            this.$store.dispatch('user/loginWithSMS', this.loginForm).then(() => {
+              this.$router.push({ path: this.redirect || '/' })
+              this.loading = false
+            }).catch(() => {
+              this.loading = false
+              Message.error('登录失败，验证码错误')
+            })
+          } else {
+            this.$store.dispatch('user/loginWithPwd', this.loginForm).then(() => {
+              this.$router.push({ path: this.redirect || '/' })
+              this.loading = false
+            }).catch(() => {
+              this.loading = false
+              Message.error('登录失败,账号或密码错误')
+            })
+          }
         } else {
-          console.log('error submit!!')
+          Message.error('递交错误')
           return false
         }
       })

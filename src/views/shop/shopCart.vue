@@ -4,15 +4,19 @@
     <el-card id="search">
       <el-row>
         <el-col :span="12">
-          <el-input v-model="searchModel.title" placeholder="书名查询"></el-input>
+          <el-input v-model="searchModel.title" placeholder="书名"></el-input>
           <el-button @click="getShopList"  type="primary" round icon="el-icon-search">查询</el-button>
+        </el-col>
+        <el-col :span="12" align="right">
+          <el-button type="warning">一键清空</el-button>
+          <el-button type="danger">一键购买</el-button>
         </el-col>
       </el-row>
     </el-card>
     <!--结果列表-->
     <el-card>
-      <el-table :data="shopList" stripe style="width: 100%">
-        <el-table-column prop="index" label="#" width="100">
+      <el-table :data="shopList" stripe style="width: 100%" height="500" border>
+        <el-table-column prop="index" label="#" width="80">
           <template v-slot="scope">
             {{(searchModel.pageNo-1) * searchModel.pageSize + scope.$index + 1}}
           </template>
@@ -20,11 +24,15 @@
         <el-table-column prop="title" label="书名" width="180"></el-table-column>
         <el-table-column prop="price" label="价格" width="180"></el-table-column>
         <el-table-column prop="createdAt" label="加入购物车时间" width="250px"></el-table-column>
-        <el-table-column prop="quantity" label="数量" width="330px"></el-table-column>
+        <el-table-column prop="quantity" label="数量" width="330px" >
+          <template v-slot:="scope" >
+            <el-input-number  v-model="scope.row.quantity" :min="1" :step="1"  @change="changeQuantity(scope.$index)" ></el-input-number>
+          </template>
+        </el-table-column>
         <el-table-column prop="bookId" label="操作" header-align="center">
           <template v-slot:="scope">
-            <el-button type="primary" @click="getBookDetail(scope.row.id)" round>查看详情</el-button>
-            <el-button type="warning" @click="cancelShop(scope.row.id)"  round >取消购物车</el-button>
+            <el-button type="primary" @click="getBookDetail(scope.row.bookId)" round>查看详情</el-button>
+            <el-button type="warning" @click="cancelShop(scope.row.bookId)"  round >取消购物车</el-button>
             <el-button type="danger" round>立即购买</el-button>
           </template>
         </el-table-column>
@@ -58,21 +66,30 @@
 <script>
 import shopApi from '@/api/shop'
 import bookApi from '@/api/book'
-import shopUtil from '@/utils/shopUtil';
+import shopUtil from '@/utils/shopUtil'
 export default {
+  computed: {
+  },
   data() {
     return {
-      total: 0,
+      total: 10,
       shopList: [],
       bookDetail: [],
       dialogTableVisible: false,
       searchModel: {
         pageNo: 1,
         pageSize: 5
-      }
+      },
+      num: '1',
+      quantityValue: 1
     }
   },
   methods: {
+    // 修改数量
+    changeQuantity(id) {
+      console.log(id)
+      console.log(this.shopList[id].quantity)
+    },
     // 取消购物车
     cancelShop(id) {
       shopApi.cancelShopCart(id).then(response => {
@@ -81,7 +98,7 @@ export default {
           shopUtil.success(this, '取消成功')
           // eslint-disable-next-line no-empty
         } else {
-          shopUtil.fail(this, '取消失败')
+          shopUtil.fail(this, response.message)
         }
         this.getShopList()
       })
@@ -105,8 +122,7 @@ export default {
     // 得到书籍列表
     getShopList() {
       shopApi.getShopList(this.searchModel).then(response => {
-        this.total = response.data.total
-        this.shopList = response.data.shoppingCartList
+        this.shopList = response.data.shopCartList
         console.log(response.data)
       })
     }

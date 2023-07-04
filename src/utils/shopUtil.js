@@ -8,7 +8,7 @@ export default {
   },
   fail(shopInstance, message) {
     shopInstance.$notify.error({
-      title: '错误',
+      title: '失败',
       message: message
     })
   }

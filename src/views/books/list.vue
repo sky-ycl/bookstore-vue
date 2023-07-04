@@ -87,7 +87,7 @@ export default {
           shopUtil.success(this, '加入成功')
           // eslint-disable-next-line no-empty
         } else {
-          shopUtil.fail(this, '加入失败')
+          shopUtil.fail(this, response.message)
         }
       })
     },
@@ -111,7 +111,7 @@ export default {
     getBookList() {
       bookApi.getListByPage(this.searchModel).then(response => {
         this.total = response.data.total
-        this.bookList = response.data.books
+        this.bookList = response.data.bookList
       })
     }
   },

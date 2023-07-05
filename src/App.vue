@@ -16,4 +16,8 @@ export default {
  .el-card{
    margin-bottom: 10px;
  }
+ #search .el-input {
+   width: 220px;
+   margin-right: 20px;
+ }
 </style>

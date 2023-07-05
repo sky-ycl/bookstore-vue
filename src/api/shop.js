@@ -23,5 +23,11 @@ export default {
       url: `/shop/cancel/${id}`,
       method: 'put'
     })
+  },
+  clearShopCart() {
+    return request({
+      url: '/shop/clear',
+      method: 'delete'
+    })
   }
 }

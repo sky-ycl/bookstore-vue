@@ -122,9 +122,5 @@ export default {
 </script>
 
 <style>
-#search .el-input {
-  width: 220px;
-  margin-right: 20px;
-}
 
 </style>

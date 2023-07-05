@@ -140,14 +140,23 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/balance',
+    path: '/me',
     component: Layout,
+    redirect: '/me/record',
+    name: 'books',
+    meta: { title: '我的朵云', icon: '我的' },
     children: [
       {
-        path: 'me',
-        name: 'myBalance',
-        component: () => import('@/views/balance/balance.vue'),
+        path: 'balance',
+        name: 'Balance',
+        component: () => import('@/views/me/balance.vue'),
         meta: { title: '我的余额', icon: '余额' }
+      },
+      {
+        path: 'record',
+        name: 'Record',
+        component: () => import('@/views/me/record.vue'),
+        meta: { title: '充值记录', icon: '充值记录' }
       }
     ]
   },

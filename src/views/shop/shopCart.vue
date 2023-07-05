@@ -8,7 +8,7 @@
           <el-button @click="getShopList"  type="primary" round icon="el-icon-search">查询</el-button>
         </el-col>
         <el-col :span="12" align="right">
-          <el-button type="warning">一键清空</el-button>
+          <el-button type="warning" @click="clearShopCart">一键清空</el-button>
           <el-button type="danger">一键购买</el-button>
         </el-col>
       </el-row>
@@ -26,7 +26,7 @@
         <el-table-column prop="createdAt" label="加入购物车时间" width="250px"></el-table-column>
         <el-table-column prop="quantity" label="数量" width="330px" >
           <template v-slot:="scope" >
-            <el-input-number  v-model="scope.row.quantity" :min="1" :step="1"  @change="changeQuantity(scope.$index)" ></el-input-number>
+            <el-input-number  v-model="quantity" :min="1" :step="1"  @change="changeQuantity(scope.$index)" ></el-input-number>
           </template>
         </el-table-column>
         <el-table-column prop="bookId" label="操作" header-align="center">
@@ -75,6 +75,8 @@ export default {
       total: 10,
       shopList: [],
       bookDetail: [],
+      // 书籍的库存
+      quantity: '1',
       dialogTableVisible: false,
       searchModel: {
         pageNo: 1,
@@ -85,6 +87,13 @@ export default {
     }
   },
   methods: {
+    // 清空购物车
+    clearShopCart() {
+      shopApi.clearShopCart().then(response => {
+        shopUtil.success(this, response.message)
+      })
+      this.getShopList()
+    },
     // 修改数量
     changeQuantity(id) {
       console.log(id)

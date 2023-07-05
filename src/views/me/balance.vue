@@ -6,12 +6,13 @@
         <span class="balance-label">当前余额:</span>
         <span class="balance-amount">{{ balance }}￥</span>
       </div>
-      <el-button class="recharge-button" type="text"  @click="open">充值</el-button>
+      <el-button class="recharge-button" type="text" @click="open">充值</el-button>
     </div>
   </div>
 </template>
 <script>
 import balanceApi from '@/api/balance'
+
 export default {
   data() {
     return {
@@ -24,12 +25,14 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         inputPattern: /^\d+(\.\d{1,2})?$/,
-        inputErrorMessage: '邮箱格式不正确'
+        inputErrorMessage: '格式不正确'
       }).then(({ value }) => {
-        this.$message({
-
-          type: 'success',
-          message: '充值成功,充值的金额:' + value
+        balanceApi.recharge().then(response => {
+          console.log(response.data)
+          this.$message({
+            type: 'success',
+            message: '充值成功,充值的金额:' + value + '元'
+          })
         })
       }).catch(() => {
         this.$message({

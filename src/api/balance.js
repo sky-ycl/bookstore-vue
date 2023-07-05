@@ -10,7 +10,7 @@ export default {
   recharge() {
     return request({
       url: 'me/recharge',
-      method: 'put'
+      method: 'post'
     })
   }
 }

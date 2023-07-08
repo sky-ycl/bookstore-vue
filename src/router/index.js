@@ -143,7 +143,7 @@ export const constantRoutes = [
     path: '/me',
     component: Layout,
     redirect: '/me/record',
-    name: 'books',
+    name: 'me',
     meta: { title: '我的朵云', icon: '我的' },
     children: [
       {

@@ -26,14 +26,14 @@
         <el-table-column prop="createdAt" label="加入购物车时间" width="250px"></el-table-column>
         <el-table-column prop="quantity" label="数量" width="330px" >
           <template v-slot:="scope" >
-            <el-input-number  v-model="quantity" :min="1" :step="1"  @change="changeQuantity(scope.$index)" ></el-input-number>
+            <el-input-number  v-model="quantity[scope.$index]" :min="1" :step="1"  @change="changeQuantity(quantity[scope.$index])" size="small"></el-input-number>
           </template>
         </el-table-column>
         <el-table-column prop="bookId" label="操作" header-align="center">
           <template v-slot:="scope">
             <el-button type="primary" @click="getBookDetail(scope.row.bookId)" round>查看详情</el-button>
             <el-button type="warning" @click="cancelShop(scope.row.bookId)"  round >取消购物车</el-button>
-            <el-button type="danger" round>立即购买</el-button>
+            <el-button type="danger" round @click="getShopNum(scope.$index)">立即购买</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -72,11 +72,11 @@ export default {
   },
   data() {
     return {
+      val: 1,
       total: 10,
       shopList: [],
+      quantity: [],
       bookDetail: [],
-      // 书籍的库存
-      quantity: '1',
       dialogTableVisible: false,
       searchModel: {
         pageNo: 1,
@@ -87,6 +87,10 @@ export default {
     }
   },
   methods: {
+    // 得到购物车的商品数量
+    getShopNum(index) {
+      console.log(this.quantity[index])
+    },
     // 清空购物车
     clearShopCart() {
       shopApi.clearShopCart().then(response => {
@@ -95,9 +99,8 @@ export default {
       this.getShopList()
     },
     // 修改数量
-    changeQuantity(id) {
-      console.log(id)
-      console.log(this.shopList[id].quantity)
+    changeQuantity(num) {
+      console.log(num)
     },
     // 取消购物车
     cancelShop(id) {

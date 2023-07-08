@@ -11,5 +11,14 @@ export default {
         recordId: searchModel.recordId
       }
     })
+  },
+  deleteRecord(recordId) {
+    return request({
+      url: '/record/delete',
+      method: 'delete',
+      params: {
+        recordId: recordId
+      }
+    })
   }
 }

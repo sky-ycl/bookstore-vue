@@ -7,10 +7,13 @@ export default {
       method: 'get'
     })
   },
-  recharge() {
+  recharge(money) {
     return request({
       url: 'me/recharge',
-      method: 'post'
+      method: 'post',
+      params: {
+        money: money
+      }
     })
   }
 }

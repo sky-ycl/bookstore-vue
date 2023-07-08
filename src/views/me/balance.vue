@@ -25,14 +25,23 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         inputPattern: /^\d+(\.\d{1,2})?$/,
-        inputErrorMessage: '格式不正确'
+        inputErrorMessage: '请输入正确的金额'
       }).then(({ value }) => {
-        balanceApi.recharge().then(response => {
+        balanceApi.recharge(value).then(response => {
           console.log(response.data)
-          this.$message({
-            type: 'success',
-            message: '充值成功,充值的金额:' + value + '元'
-          })
+          if (response.message === 'success') {
+            this.$message({
+              type: 'success',
+              message: '充值成功,充值的金额:' + value + '元'
+            })
+            // eslint-disable-next-line no-empty
+          } else {
+            this.$message({
+              type: 'error',
+              message: '充值失败'
+            })
+          }
+          this.getBalance()
         })
       }).catch(() => {
         this.$message({
@@ -40,13 +49,16 @@ export default {
           message: '取消充值'
         })
       })
+    },
+    getBalance() {
+      balanceApi.getBalance().then(response => {
+        console.log(response.data.balance)
+        this.balance = response.data.balance
+      })
     }
   },
   mounted() {
-    balanceApi.getBalance().then(response => {
-      console.log(response.data.balance)
-      this.balance = response.data.balance
-    })
+    this.getBalance()
   }
 }
 </script>

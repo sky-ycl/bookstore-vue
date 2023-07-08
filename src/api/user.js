@@ -32,3 +32,22 @@ export function sendCode(phone) {
     }
   })
 }
+export function signCount() {
+  return request({
+    url: '/user/signCount',
+    method: 'get'
+  })
+}
+export function sign() {
+  return request({
+    url: '/user/sign',
+    method: 'post'
+  })
+}
+
+export function isSign() {
+  return request({
+    url: '/user/isSign',
+    method: 'get'
+  })
+}

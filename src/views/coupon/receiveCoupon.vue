@@ -12,7 +12,7 @@
           <el-step title="第六天"></el-step>
           <el-step title="第七天"></el-step>
         </el-steps>
-        <el-button type="primary" style="margin-top: 12px;" @click="next" :disabled="false">
+        <el-button type="primary" style="margin-top: 12px;" @click="next" :disabled="signDisabled">
           {{ signDisabled ? '已签到' : '签到' }}
         </el-button>
       </div>
@@ -45,11 +45,14 @@
 <script>
 import couponAPi from '@/api/coupon'
 import notifyUtil from '@/utils/notifyUtil'
+import {signCount, sign, isSign} from '@/api/user'
+
 export default {
   data() {
     return {
       lastSignDate: null, // 上一次签到的日期
       receiveDisabled: true,
+      signDisabled: true,
       active: 0,
       totalQuantity: 100, // 总数量
       claimedQuantity: 0, // 已领取数量
@@ -66,26 +69,34 @@ export default {
         // 如果已签到，则不执行签到操作
         // return
       }
-      // 签到成功后更新上一次签到的日期
-      const currentDate = new Date().toLocaleDateString()
-      this.lastSignDate = currentDate
-      localStorage.setItem('lastSignDate', currentDate)
-      if (this.active > 6) {
-        this.receiveDisabled = false
-      } else {
-        this.receiveDisabled = true
-      }
+      // 执行签到操作
+      // 调用后端接口，更新用户的签到状态
+      sign().then(response => {
+        if (response.message === 'success') {
+          notifyUtil.success(this, '签到成功')
+          if (this.active > 6) {
+            this.receiveDisabled = false
+          } else {
+            this.receiveDisabled = true
+          }
+        } else {
+          notifyUtil.fail(this, '签到失败')
+        }
+        this.getSignCount()
+      })
     },
     // 签到领取优惠卷
     SignCoupon() {
-      couponAPi.SignCoupon().then(response => {
+      couponAPi.SignCoupon(1).then(response => {
         if (response.message === 'success') {
           notifyUtil.success(this, '领取成功')
+          this.receiveDisabled = false
         } else {
           notifyUtil.fail(this, response.message)
         }
       })
     },
+    // 查询今天是否签到
     formatDate(date) {
       // 自定义日期格式化函数
       const options = {
@@ -110,7 +121,25 @@ export default {
       } else {
         this.$notify.error('当前不在优惠券活动时间范围内')
       }
+    },
+    // 得到签到天数
+    getSignCount() {
+      // 获取签到次数
+      signCount().then(response => {
+        this.active = response.data
+      })
+    },
+    // 查看今天是否签到
+    isSign: function() {
+      isSign().then(response => {
+        if (response.data === true) {
+          this.signDisabled = true
+        } else {
+          this.signDisabled = false
+        }
+      })
     }
+
   },
   computed: {
     remainingQuantity() {
@@ -125,16 +154,14 @@ export default {
       const start = this.formatDate(this.startTime)
       const end = this.formatDate(this.endTime)
       return `${start} - ${end}` // 格式化活动时间范围
-    },
-    signDisabled() {
-      // 判断当前日期是否已签到
-      const currentDate = new Date().toLocaleDateString()
-      return currentDate === this.lastSignDate
     }
   },
-  created() {
-    // 从本地存储中获取上一次签到的日期
-    this.lastSignDate = localStorage.getItem('lastSignDate')
+  mounted() {
+    // 统计签到次数
+    this.getSignCount()
+
+    // 判断今天是否签到
+    this.isSign()
   }
 }
 </script>

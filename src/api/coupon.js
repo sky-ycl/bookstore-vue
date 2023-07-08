@@ -7,10 +7,13 @@ export default {
       method: 'get'
     })
   },
-  SignCoupon() {
+  SignCoupon: function(couponId) {
     return request({
       url: '/coupon/sign',
-      method: 'get'
+      method: 'put',
+      params: {
+        couponId: couponId
+      }
     })
   },
   LimitCoupon() {

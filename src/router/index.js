@@ -93,12 +93,21 @@ export const constantRoutes = [
   {
     path: '/coupon',
     component: Layout,
+    redirect: '/coupon/receiveCoupon',
+    name: 'coupon',
+    meta: { title: '优惠卷', icon: '优惠卷' },
     children: [
       {
-        path: 'index',
-        name: 'Coupon',
-        component: () => import('@/views/coupon/coupon.vue'),
-        meta: { title: '优惠卷', icon: '优惠卷' }
+        path: 'receiveCoupon',
+        name: 'receiveCoupon',
+        component: () => import('@/views/coupon/receiveCoupon.vue'),
+        meta: { title: '领取优惠卷', icon: '优惠卷' }
+      },
+      {
+        path: 'myCoupon',
+        name: 'myCoupon',
+        component: () => import('@/views/coupon/myCoupon.vue'),
+        meta: { title: '我的优惠卷', icon: '优惠卷' }
       }
     ]
   },

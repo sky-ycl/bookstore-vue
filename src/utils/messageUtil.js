@@ -1,14 +1,20 @@
 export default {
   success(vueInstance, message) {
-    vueInstance.message({
+    vueInstance.$message({
       message: message,
       type: 'success'
     })
   },
-  fail(vueInstance, message) {
-    vueInstance.message({
+  warn(vueInstance, message) {
+    vueInstance.$message({
       message: message,
-      type: 'fail'
+      type: 'warning'
+    })
+  },
+  fail(vueInstance, message) {
+    vueInstance.$message({
+      message: message,
+      type: 'error'
     })
   }
 }

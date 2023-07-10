@@ -1,13 +1,7 @@
 import request from '@/utils/request'
 
 export default {
-  sendSign(searchModel) {
-    return request({
-      url: '/coupon/sendSign',
-      method: 'get'
-    })
-  },
-  SignCoupon: function(couponId) {
+  signCoupon: function(couponId) {
     return request({
       url: '/coupon/sign',
       method: 'put',
@@ -16,9 +10,24 @@ export default {
       }
     })
   },
-  LimitCoupon() {
+  limitCouponInfo() {
+    return request({
+      url: '/coupon/info',
+      method: 'get'
+    })
+  },
+  limitCoupon: function(couponId) {
     return request({
       url: '/coupon/limit',
+      method: 'put',
+      params: {
+        couponId: couponId
+      }
+    })
+  },
+  myCouponInfo() {
+    return request({
+      url: '/coupon/me',
       method: 'get'
     })
   }

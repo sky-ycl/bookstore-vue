@@ -6,7 +6,7 @@
         <el-col :span="20">
           <el-input v-model="searchModel.title" placeholder="书名"></el-input>
           <el-input v-model="searchModel.author" placeholder="作者"></el-input>
-          <el-button  @click="getBookList" type="primary" round icon="el-icon-search">查询</el-button>
+          <el-button @click="getBookList" type="primary" round icon="el-icon-search">查询</el-button>
         </el-col>
         <el-col :span="4" align="right">
           <el-button type="primary" icon="el-icon-plus" circle></el-button>
@@ -18,19 +18,19 @@
       <el-table :data="bookList" stripe style="width: 100%">
         <el-table-column label="#" width="80">
           <template v-slot="scope">
-            {{(searchModel.pageNo-1) * searchModel.pageSize + scope.$index + 1}}
+            {{ (searchModel.pageNo - 1) * searchModel.pageSize + scope.$index + 1 }}
           </template>
         </el-table-column>
         <el-table-column prop="title" label="书名" width="180"></el-table-column>
         <el-table-column prop="author" label="作者" width="200"></el-table-column>
         <el-table-column prop="price" label="价格" width="150"></el-table-column>
         <el-table-column prop="quantity" label="库存" width="420"></el-table-column>
-        <el-table-column prop="id" label="操作"  header-align="center" >
-            <template v-slot:="scope">
-              <el-button type="primary" @click="getBookDetail(scope.row.id)" round>查看详情</el-button>
-              <el-button type="warning" @click="addShopCart(scope.row.id)" round>加入购物车</el-button>
-              <el-button type="danger" round>立即购买</el-button>
-            </template>
+        <el-table-column prop="id" label="操作" header-align="center">
+          <template v-slot:="scope">
+            <el-button type="primary" @click="getBookDetail(scope.row.id)" round>查看详情</el-button>
+            <el-button type="warning" @click="addShopCart(scope.row.id)" round>加入购物车</el-button>
+            <el-button type="danger" round @click="showBuyDialog(scope.row)">立即购买</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </el-card>
@@ -56,6 +56,30 @@
         :total="total">
       </el-pagination>
     </el-card>
+    <!--表单-->
+    <el-dialog title="购买书籍" :visible.sync="dialogFormVisible">
+      <el-form :model="buyBookDetail">
+        <template>
+          书籍名称:
+          <el-input :placeholder=buyBookDetail.title :disabled="true" class="inputWith"></el-input>
+        </template>
+        <p></p>
+        <template>
+          书籍价格:
+          <el-input :placeholder="(buyBookDetail.price * num).toFixed(2)" :disabled="true" class="inputWith"></el-input>
+          <div></div>
+        </template>
+        <p></p>
+        <template>
+          购买数量:
+          <el-input-number size="small" v-model="num" :min="1" :max="10" label="描述文字"></el-input-number>
+        </template>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancelBuyBook">取 消</el-button>
+        <el-button type="primary" @click="buyBook(buyBookDetail.id)">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -64,6 +88,8 @@
 import bookApi from '@/api/book'
 import shopApi from '@/api/shop'
 import shopUtil from '@/utils/shopUtil'
+import messageUtil from '@/utils/messageUtil'
+
 export default {
   data() {
     return {
@@ -75,10 +101,38 @@ export default {
       searchModel: {
         pageNo: 1,
         pageSize: 5
+      },
+      dialogFormVisible: false,
+      formLabelWidth: '100px',
+      num: 1,
+      // 购买书籍的信息
+      buyBookDetail: {},
+      // 购买书籍的内容
+      buyBookData: {
+        num: this.num,
+        id: ''
       }
+
     }
   },
   methods: {
+    // 购买书籍
+    buyBook(id) {
+      this.buyBookData.id = id
+      bookApi.buyBook(id,this.num).then(response => {
+
+      })
+      this.dialogFormVisible = false
+    },
+    // 取消购买书籍
+    cancelBuyBook() {
+      this.dialogFormVisible = false
+      messageUtil.warn(this, '取消成功')
+    },
+    showBuyDialog(row) {
+      this.dialogFormVisible = true
+      this.buyBookDetail = row
+    },
     // 加入购物车
     addShopCart(id) {
       shopApi.addShopCart(id).then(response => {
@@ -122,5 +176,7 @@ export default {
 </script>
 
 <style>
-
+.inputWith {
+  width: 150px;
+}
 </style>

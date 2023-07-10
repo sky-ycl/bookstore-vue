@@ -18,5 +18,15 @@ export default {
       url: `/books/${id}`,
       method: 'get'
     })
+  },
+  buyBook(id, num) {
+    return request({
+      url: '/books/buy',
+      method: 'put',
+      params: {
+        id: id,
+        num: num
+      }
+    })
   }
 }

@@ -20,7 +20,7 @@
         <div class="coupon-title">满减优惠券</div>
         <div class="coupon-description">满100元减20元</div>
         <div class="coupon-action">
-          <el-button type="primary" round :disabled="receiveDisabled" @click="receiveSignCoupon">立即领取</el-button>
+          <el-button type="primary" round :disabled="false" @click="receiveSignCoupon">立即领取</el-button>
         </div>
       </div>
     </el-card>

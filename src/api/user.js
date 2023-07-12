@@ -51,3 +51,9 @@ export function isSign() {
     method: 'get'
   })
 }
+export function hasCoupon() {
+  return request({
+    url: '/user/hasCoupon',
+    method: 'get'
+  })
+}

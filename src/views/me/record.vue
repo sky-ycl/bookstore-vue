@@ -59,7 +59,7 @@ export default {
   methods: {
     // 删除充值用户记录
     deleteRecord(recordId) {
-      this.$confirm('确认删除吗？', {
+      this.$confirm('确认删除吗？','提示' , {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

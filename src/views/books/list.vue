@@ -4,7 +4,7 @@
     <el-card id="search">
       <el-row>
         <el-col :span="20">
-          <el-input v-model="searchModel.title" placeholder="书名"/>
+          <el-input v-model="searchModel.title" placeholder="书名" />
           <el-input v-model="searchModel.author" placeholder="作者"/>
           <el-button type="primary" round icon="el-icon-search" @click="getBookList">查询</el-button>
         </el-col>

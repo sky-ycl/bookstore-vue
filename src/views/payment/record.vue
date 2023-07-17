@@ -1,22 +1,34 @@
 <template>
-  <div class="purchase-container">
-    <h2>购买商品</h2>
-
-    <div class="product-info">
-      <p>商品名称: {{ product.name }}</p>
-      <p>商品价格: {{ product.price }}</p>
-    </div>
-
-    <div class="coupon-container">
-      <h3>优惠券</h3>
-      <el-select v-model="selectedCoupon" placeholder="请选择优惠券">
-        <el-option v-for="coupon in coupons" :key="coupon.id" :label="coupon.name" :value="coupon.id"></el-option>
-      </el-select>
-    </div>
-
-    <div class="purchase-button">
-      <el-button type="primary" @click="purchase">购买</el-button>
-    </div>
+  <div class="friend-circle">
+    <el-card v-for="post in posts" :key="post.id" class="post-card">
+      <div class="post-header">
+        <el-avatar :src="post.avatar" size="medium"></el-avatar>
+        <span class="post-username">{{ post.username }}</span>
+      </div>
+      <p></p>
+      <el-image class="post-image" :src="post.image" fit="cover" style="width: 200px; height: 200px"></el-image>
+      <div class="post-content">
+        <p>{{ post.content }}</p>
+      </div>
+      <el-button
+        type="text"
+        class="post-like-btn"
+        :class="{ 'highlight': post.isLiked }"
+        @click="toggleLike(post)"
+      >
+        <i :class="post.isLiked ? 'my-like-icon-active' : 'my-like-icon'"></i>
+        {{ post.likes }}
+      </el-button>
+      <el-button type="text" class="post-comment-btn" @click="showComments(post.id)">评论({{ post.comments.length }})</el-button>
+      <div v-if="showCommentSection === post.id" class="comment-section">
+        <el-divider></el-divider>
+        <h3>评论</h3>
+        <div v-for="comment in post.comments" :key="comment.id" class="comment">
+          <span class="common-username">{{ comment.username }}:</span>
+          <span class="comment-text">{{ comment.text }}</span>
+        </div>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -24,46 +36,84 @@
 export default {
   data() {
     return {
-      product: {
-        name: "商品A",
-        price: 100,
-      },
-      coupons: [
-        { id: 1, name: "优惠券1", amount: 10 },
-        { id: 2, name: "优惠券2", amount: 20 },
-        { id: 3, name: "优惠券3", amount: 30 },
+      posts: [
+        {
+          id: 1,
+          username: '小鱼同学',
+          avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+          image: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+          content: '你真帅',
+          likes: 10,
+          isLike: false,
+          comments: [
+            {id: 1, username: 'Alice', text: 'Cool post!'},
+            {id: 2, username: 'Bob', text: 'Nice picture!'}
+          ]
+        },
+        {
+          id: 2,
+          username: 'John Doe',
+          avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+          image: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+          content: 'This is a post about something interesting.',
+          likes: 10,
+          comments: [
+            {id: 1, username: 'Alice', text: 'Cool post!'},
+            {id: 2, username: 'Bob', text: 'Nice picture!'}
+          ]
+        }
+        // 添加更多动态数据...
       ],
-      selectedCoupon: null,
-    };
+      showCommentSection: null
+    }
   },
   methods: {
-    purchase() {
-      // 处理购买逻辑
-      console.log("商品名称:", this.product.name);
-      console.log("商品价格:", this.product.price);
-      console.log("选择的优惠券:", this.selectedCoupon);
-      // 可以根据需要进行进一步的处理，例如提交购买订单给后端进行处理等
+    toggleLike(post) {
+      post.isLiked = !post.isLiked
+      if (post.isLiked) {
+        post.likes++
+      } else {
+        post.likes--
+      }
     },
-  },
-};
+    showComments(postId) {
+      if (this.showCommentSection === postId) {
+        this.showCommentSection = null
+      } else {
+        this.showCommentSection = postId
+      }
+    }
+  }
+}
 </script>
 
 <style scoped>
-.purchase-container {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
+.common-username{
+  color: #337ab7
+}
+.comment-text {
+  margin-left: 15px; /* 设置评论内容与用户名的间距 */
+}
+.post-like-btn,
+.post-comment-btn {
+  margin-right: 10px;
 }
 
-.product-info {
-  margin-bottom: 20px;
+.highlight {
+  color: red;
 }
 
-.coupon-container {
-  margin-bottom: 20px;
+.my-like-icon,
+.my-like-icon-active {
+  font-size: 18px;
 }
 
-.purchase-button {
-  text-align: center;
+.my-like-icon:before {
+  content: "\2661"; /* 自定义的点赞图标，可以替换为其他 Unicode 编码或自定义字体图标类名 */
 }
+
+.my-like-icon-active:before {
+  content: "\2665"; /* 自定义的点赞图标（高亮），可以替换为其他 Unicode 编码或自定义字体图标类名 */
+}
+
 </style>

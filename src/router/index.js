@@ -42,7 +42,6 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
@@ -51,7 +50,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: '首页', affix: true }
+      meta: {title: '首页', icon: '首页', affix: true}
     }]
   },
 
@@ -60,19 +59,19 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/books/list',
     name: 'books',
-    meta: { title: '朵云书籍', icon: '书籍' },
+    meta: {title: '朵云书籍', icon: '书籍'},
     children: [
       {
         path: 'list',
         name: 'bookList',
         component: () => import('@/views/books/list.vue'),
-        meta: { title: '书籍列表', icon: '书籍' }
+        meta: {title: '书籍列表', icon: '书籍'}
       },
       {
         path: 'manage',
         name: 'bookManage',
         component: () => import('@/views/books/manage.vue'),
-        meta: { title: '我的书籍', icon: '书籍' }
+        meta: {title: '我的书籍', icon: '书籍'}
       }
     ]
   },
@@ -85,7 +84,7 @@ export const constantRoutes = [
         path: 'shopCart',
         name: 'shopCart',
         component: () => import('@/views/shop/shopCart.vue'),
-        meta: { title: '购物车', icon: '购物车' }
+        meta: {title: '购物车', icon: '购物车'}
       }
     ]
   },
@@ -95,19 +94,19 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/coupon/receiveCoupon',
     name: 'coupon',
-    meta: { title: '优惠卷', icon: '优惠卷' },
+    meta: {title: '优惠卷', icon: '优惠卷'},
     children: [
       {
         path: 'receiveCoupon',
         name: 'receiveCoupon',
         component: () => import('@/views/coupon/receiveCoupon.vue'),
-        meta: { title: '领取优惠卷', icon: '优惠卷' }
+        meta: {title: '领取优惠卷', icon: '优惠卷'}
       },
       {
         path: 'myCoupon',
         name: 'myCoupon',
         component: () => import('@/views/coupon/myCoupon.vue'),
-        meta: { title: '我的优惠卷', icon: '优惠卷' }
+        meta: {title: '我的优惠卷', icon: '优惠卷'}
       }
     ]
   },
@@ -119,19 +118,32 @@ export const constantRoutes = [
         path: 'index',
         name: 'Order',
         component: () => import('@/views/order/order.vue'),
-        meta: { title: '订单', icon: '订单' }
+        meta: {title: '订单', icon: '订单'}
       }
     ]
   },
   {
     path: '/friends',
     component: Layout,
+    meta: {title: '朵云圈', icon: '朋友圈'},
     children: [
       {
         path: 'index',
         name: 'Friends',
         component: () => import('@/views/friends/index.vue'),
-        meta: { title: '朵云圈', icon: '朋友圈' }
+        meta: {title: '朵云圈', icon: '朋友圈'}
+      },
+      {
+        path: 'show',
+        name: 'show',
+        component: () => import('@/views/friends/show.vue'),
+        meta: {title: '发表', icon: '发表文章'}
+      },
+      {
+        path: 'temp',
+        name: 'temp',
+        component: () => import('@/views/friends/temp.vue'),
+        meta: {title: '临时', icon: '发表文章'}
       }
     ]
   },
@@ -144,7 +156,7 @@ export const constantRoutes = [
         path: 'record',
         name: 'record',
         component: () => import('@/views/payment/record.vue'),
-        meta: { title: '支付记录', icon: '支付记录' }
+        meta: {title: '支付记录', icon: '支付记录'}
       }
     ]
   },
@@ -153,19 +165,19 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/me/record',
     name: 'me',
-    meta: { title: '我的朵云', icon: '我的' },
+    meta: {title: '我的朵云', icon: '我的'},
     children: [
       {
         path: 'balance',
         name: 'Balance',
         component: () => import('@/views/me/balance.vue'),
-        meta: { title: '我的余额', icon: '余额' }
+        meta: {title: '我的余额', icon: '余额'}
       },
       {
         path: 'record',
         name: 'Record',
         component: () => import('@/views/me/record.vue'),
-        meta: { title: '充值记录', icon: '充值记录' }
+        meta: {title: '充值记录', icon: '充值记录'}
       }
     ]
   },
@@ -184,24 +196,23 @@ export const constantRoutes = [
         path: 'menu1',
         name: 'Menu1',
         component: () => import('@/views/settings/menu1/index.vue'), // Parent router-view
-        meta: { title: '设置1' }
+        meta: {title: '设置1'}
       },
       {
         path: 'menu2',
         name: 'Menu2',
         component: () => import('@/views/settings/menu2/index.vue'),
-        meta: { title: '设置2' }
+        meta: {title: '设置2'}
       }
     ]
   },
-
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  {path: '*', redirect: '/404', hidden: true}
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({y: 0}),
   routes: constantRoutes
 })
 

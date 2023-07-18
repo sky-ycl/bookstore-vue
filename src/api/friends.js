@@ -3,17 +3,14 @@ import request from '@/utils/request'
 export default {
   getFriendList() {
     return request({
-      url: 'friends/list',
+      url: '/friends/list',
       method: 'get'
     })
   },
-  recharge(money) {
+  isLike(id) {
     return request({
-      url: 'me/recharge',
-      method: 'post',
-      params: {
-        money: money
-      }
+      url: `/friends/like/${id}`,
+      method: 'put'
     })
   }
 }

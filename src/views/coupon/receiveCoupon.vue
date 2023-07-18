@@ -1,7 +1,7 @@
 <template>
   <div class="coupon-container">
-    <h3>签到领优惠券</h3>
     <el-card class="coupon-card">
+    <h3>签到领优惠券</h3>
       <div>
         <el-steps :active="active" finish-status="success">
           <el-step title="第一天"/>
@@ -20,25 +20,27 @@
         <div class="coupon-title">满减优惠券</div>
         <div class="coupon-description">满100元减20元</div>
         <div class="coupon-action">
-          <el-button type="primary" round :disabled="false" @click="receiveSignCoupon">立即领取</el-button>
+          <el-button type="primary" round :disabled="receiveDisabled" @click="receiveSignCoupon">立即领取</el-button>
         </div>
       </div>
     </el-card>
-    <h3>限时优惠券</h3>
-    <el-card v-for="coupon in couponInfo" :key="coupon.id" class="coupon-card">
-      <div class="coupon-info" :coupon="coupon">
-        <div class="coupon-title">限时优惠卷</div>
-        <div class="coupon-description">满{{ coupon.minimumAmount }}元减{{ coupon.discountAmount }}</div>
-        <div class="coupon-quantity">剩余可用数量：{{ coupon.quantity }}</div>
-        <div class="coupon-time">
-          <span class="time-label">活动时间:</span>
-          <span class="time-range">{{ formatTimeRange }}</span>
+    <div>
+      <el-card v-for="coupon in couponInfo" :key="coupon.id" class="coupon-card">
+      <h3>限时优惠券</h3>
+        <div class="coupon-info" :coupon="coupon">
+          <div class="coupon-title">限时优惠卷</div>
+          <div class="coupon-description">满{{ coupon.minimumAmount }}元减{{ coupon.discountAmount }}</div>
+          <div class="coupon-quantity">剩余可用数量：{{ coupon.quantity }}</div>
+          <div class="coupon-time">
+            <span class="time-label">活动时间:</span>
+            <span class="time-range">{{ formatTimeRange }}</span>
+          </div>
+          <div class="coupon-action">
+            <el-button type="primary" round :disabled="!isActive" @click="receiveLimitCoupon">立即领取</el-button>
+          </div>
         </div>
-        <div class="coupon-action">
-          <el-button type="primary" round :disabled="!isActive" @click="receiveLimitCoupon">立即领取</el-button>
-        </div>
-      </div>
-    </el-card>
+      </el-card>
+    </div>
   </div>
 </template>
 

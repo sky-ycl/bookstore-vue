@@ -10,38 +10,37 @@
         <p>{{ post.content }}</p>
       </div>
       <div class="post-images">
-        <el-image v-for="(image, index) in post.image" :key="index" :src="image" fit="cover" class="post-image"></el-image>
+        <el-image v-for="(image, index) in post.images.split(',')" :key="index" :src="image" fit="cover" class="post-image"></el-image>
       </div>
       <div>
         <el-button
           type="text"
           class="post-like-btn"
-          :class="{ 'highlight': post.isLiked }"
+          :class="{ 'highlight': post.isLike }"
           @click="toggleLike(post)"
         >
-          <i :class="post.isLiked ? 'my-like-icon-active' : 'my-like-icon'" @click="isLike(post.id)">{{
+          <i :class="post.isLike ? 'my-like-icon-active' : 'my-like-icon'" @click="isLike(post.id)">{{
               post.likes
             }}</i>
         </el-button>
         <el-button type="text" class="post-comment-btn" @click="showComments(post.id)">
-          评论({{ post.friendComments.length}})
+          评论({{ post.friendComments.length }})
         </el-button>
       </div>
       <div v-if="showCommentSection === post.id" class="comment-section">
         <el-divider></el-divider>
         <div v-for="(comment,index) in post.friendComments" :key="index" class="comment">
-          <el-avatar :src="post.icon" size="small"></el-avatar>
+          <el-avatar :src="comment.icon" size="small"></el-avatar>
           <span class="common-username">{{ comment.nickName }}:</span>
           <span class="comment-text">{{ comment.text }}</span>
         </div>
         <h3>评论</h3>
         <el-form ref="commentForm" :model="comment" label-width="0" class="comment-form">
           <el-form-item>
-            <el-input v-model="comment.text" placeholder="请输入标题" type="textarea" autosize
-                      class="custom-input"></el-input>
+            <el-input v-model="comment.text" placeholder="请输入标题" type="textarea" autosize class="custom-input"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitComment">发表评论</el-button>
+            <el-button type="primary" @click="submitComment(post.id)">发表评论</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -56,6 +55,7 @@ import messageUtil from '@/utils/messageUtil'
 export default {
   data() {
     return {
+      images: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
       posts: [],
       comment: {
         text: ''
@@ -78,22 +78,24 @@ export default {
       })
     },
     toggleLike(post) {
-      post.isLiked = !post.isLiked
-      if (post.isLiked) {
+      post.isLike = !post.isLike
+      if (post.isLike) {
         post.likes++
       } else {
         post.likes--
       }
     },
-    submitComment() {
+    submitComment(id) {
       // 发表评论逻辑
       // 可以将评论数据发送到后端进行保存或处理
-      const newComment = {
-        id: '', // 生成唯一的评论ID
-        username: 'Alice', // 当前用户的用户名
+      const comment = {
+        id: id,
         text: this.comment.text
       }
-      this.post.comments.push(newComment);
+      console.log(comment.id)
+      friendApi.sendComment(comment).then(response => {
+        response.data
+      })
       this.comment.text = '' // 清空评论内容
     },
     showComments(postId) {
@@ -106,8 +108,8 @@ export default {
     // 得到朋友圈列表
     getFriendList() {
       friendApi.getFriendList().then(response => {
-        console.log(response.data)
         this.posts = response.data
+        console.log(response.data[0].images.split(','))
       })
     }
   },
@@ -154,8 +156,8 @@ export default {
 }
 
 .post-image {
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   margin-right: 10px; /* 添加照片之间的间隔 */
   margin-bottom: 10px; /* 添加照片与下方内容的间隔 */
 }

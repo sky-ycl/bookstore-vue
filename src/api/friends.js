@@ -12,5 +12,12 @@ export default {
       url: `/friends/like/${id}`,
       method: 'put'
     })
+  },
+  sendComment(comment) {
+    return request({
+      url: '/friend/comment',
+      method: 'post',
+      data: comment
+    })
   }
 }

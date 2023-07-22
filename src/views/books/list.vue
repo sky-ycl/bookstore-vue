@@ -197,6 +197,7 @@ export default {
           messageUtil.success(this, `购买成功,你支付的金额为${money}￥`)
           this.getBookList()
           bookApi.createUserBook(id, this.num).then(response => {
+
           })
         } else {
           messageUtil.fail(this, response.message)

@@ -10,7 +10,8 @@
         <p>{{ post.content }}</p>
       </div>
       <div class="post-images">
-        <el-image v-for="(image, index) in post.images.split(',')" :key="index" :src="image" fit="cover" class="post-image"></el-image>
+        <el-image v-for="(image, index) in filteredImages(post.images)" :key="index" :src="image" fit="cover"
+                  class="post-image"></el-image>
       </div>
       <div>
         <el-button
@@ -37,7 +38,8 @@
         <h3>评论</h3>
         <el-form ref="commentForm" :model="comment" label-width="0" class="comment-form">
           <el-form-item>
-            <el-input v-model="comment.text" placeholder="请输入标题" type="textarea" autosize class="custom-input"></el-input>
+            <el-input v-model="comment.text" placeholder="请输入标题" type="textarea" autosize
+                      class="custom-input"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitComment(post.id)">发表评论</el-button>
@@ -55,7 +57,6 @@ import messageUtil from '@/utils/messageUtil'
 export default {
   data() {
     return {
-      images: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
       posts: [],
       comment: {
         text: ''
@@ -64,6 +65,12 @@ export default {
     }
   },
   methods: {
+    filteredImages(images) {
+      if (images === null) {
+        return []// 返回空数组，表示没有图片
+      }
+      return images.split(',').filter(image => image !== 'null')
+    },
     isLike(id) {
       console.log(id)
       friendApi.isLike(id).then(response => {
@@ -92,9 +99,13 @@ export default {
         id: id,
         text: this.comment.text
       }
-      console.log(comment.id)
       friendApi.sendComment(comment).then(response => {
-        response.data
+        if (response.message === 'success') {
+          messageUtil.success(this, '评论成功')
+          this.getFriendList()
+        } else {
+          messageUtil.fail(this, response.message)
+        }
       })
       this.comment.text = '' // 清空评论内容
     },
@@ -109,7 +120,6 @@ export default {
     getFriendList() {
       friendApi.getFriendList().then(response => {
         this.posts = response.data
-        console.log(response.data[0].images.split(','))
       })
     }
   },

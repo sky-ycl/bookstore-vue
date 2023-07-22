@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import bookApi from '@/api/book';
+import bookApi from '@/api/book'
 
 export default {
   data() {
@@ -34,8 +34,8 @@ export default {
   },
   methods: {
     getUserBookList() {
-      bookApi.getUserBookList(this.searchModel).then(respnse => {
-        this.userBookList = respnse.data
+      bookApi.getUserBookList(this.searchModel).then(response => {
+        this.userBookList = response.data
       })
     }
   },

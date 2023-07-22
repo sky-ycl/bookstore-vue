@@ -49,12 +49,15 @@
 </template>
 
 <script>
+import friendsApi from '@/api/friends'
+import messageUtil from '@/utils/messageUtil'
+
 export default {
   data() {
     return {
       post: {
-        title: '',
-        images: []
+        title: ''
+        // images: []
       },
       dialogImageUrl: '',
       dialogVisible: false,
@@ -63,9 +66,13 @@ export default {
   },
   methods: {
     submitPost() {
-      // 提交文章逻辑
-      // 可以将文章数据发送到后端进行保存或处理
-      console.log('提交文章:', this.post)
+      friendsApi.showPost(this.post).then(response => {
+        if (response.message === 'success') {
+          messageUtil.success(this, '发表成功')
+        } else {
+          messageUtil.fail(this,response.message)
+        }
+      })
     },
     handleRemove(file, fileList) {
       const index = fileList.findIndex(item => item.uid === file.uid)

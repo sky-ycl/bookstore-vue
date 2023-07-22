@@ -15,9 +15,16 @@ export default {
   },
   sendComment(comment) {
     return request({
-      url: '/friend/comment',
+      url: '/friends/comment',
       method: 'post',
       data: comment
+    })
+  },
+  showPost(post) {
+    return request({
+      url: '/friends/show',
+      method: 'post',
+      data: post
     })
   }
 }
